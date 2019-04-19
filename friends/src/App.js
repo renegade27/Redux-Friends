@@ -20,8 +20,8 @@ class App extends Component {
         return (
             <Router>
               <div className="app-wrapper">
-                <Route exact path='/' render={(props) => <Login {...props} login={login}/>}/>
-                <PrivateRoute exact path='/friendslist' render={(props) => <FriendsList {...props} />} />
+                <Route exact path='/' component={Login} />
+                <PrivateRoute exact path='/friendslist' component={FriendsList} />
               </div>
             </Router>
         );

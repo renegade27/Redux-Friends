@@ -11,6 +11,14 @@ const LoginPage = styled.div`
     font-family: "Ubuntu Condensed", sans-serif;
 `;
 
+const ErrorMessage = styled.p`
+    background-color: red;
+    width: 100%;
+    color: white;
+    font-size: 2.0rem;
+    text-align: center;
+`;
+
 const LoginLogo = styled.img`
     margin: 10px 0;
 `;
@@ -59,9 +67,9 @@ class Login extends React.Component {
 
     loginHelper = e => {
         e.preventDefault();
-        this.props.history.push('/todolist');
-        this.props.login(this.state.username);
-        this.setState({username:'', password:''})
+        this.props.login({username : this.state.username, password : this.state.password})
+            .then(() => { this.props.history.push('/friendslist')})
+        this.setState({username:'', password:''});
     }
 
 
@@ -70,6 +78,12 @@ class Login extends React.Component {
         return (
             <LoginPage>
                 <LoginLogo src={process.env.PUBLIC_URL + 'Naught-logo.png'} />
+                <ErrorMessage>
+                    {this.props.errMsg ? 
+                    `${this.props.errMsg} error has occured, please try again.` :
+                    null 
+                    }
+                </ErrorMessage>
                 <LoginForm onSubmit={this.loginHelper}>
                     <LoginInput
                         className="login-input"
@@ -94,4 +108,10 @@ class Login extends React.Component {
     }
 }
 
-export default connect(null, { login })(Login);
+const mapStateToProps = state => {
+    return {
+        errMsg : state.errMsg
+    };
+}
+
+export default connect(mapStateToProps, { login })(Login);
